@@ -22,10 +22,10 @@ object DefinedSource {
 //自定义SourceFunction
 class MySensorSource() extends SourceFunction[SensorReading] {
     //定义随机数发生器
-    val rand = Random
+    val rand: Random.type = Random
 
     //随机生成一组传感器的初始温度
-    var currentTuple = 1.to(10).map(x => ("sensor_" + x, rand.nextDouble() * 100))
+    var currentTuple: Seq[(String, Double)] = 1.to(10).map(x => ("sensor_" + x, rand.nextDouble() * 100))
 
     //定义一个flag，用来表示数据源是否正常运行发出数据
     var running: Boolean = true

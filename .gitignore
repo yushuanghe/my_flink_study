@@ -21,3 +21,4 @@ dependency-reduced-pom.xml
 *.pyc
 */__pycache__/
 .history
+src/main/output/
