@@ -1,7 +1,7 @@
 package com.shuanghe.flink.sink
 
 import com.shuanghe.flink.source.SensorReading
-import org.apache.flink.api.common.serialization.{SimpleStringEncoder, SimpleStringSchema}
+import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaConsumer, FlinkKafkaProducer}
 
@@ -31,6 +31,7 @@ object KafkaSink {
                 val arr = data.split("\t")
                 SensorReading(arr(0), arr(1).toLong, arr(2).toDouble).toString
             })
+
         dataStream.addSink(new FlinkKafkaProducer[String]("localhost:9092", "sinktest", new SimpleStringSchema()))
 
         env.execute("flink sink")
