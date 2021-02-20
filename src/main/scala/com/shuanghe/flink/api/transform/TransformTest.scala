@@ -1,7 +1,7 @@
-package com.shuanghe.flink.transform
+package com.shuanghe.flink.api.transform
 
 import org.apache.flink.streaming.api.scala._
-import com.shuanghe.flink.source.SensorReading
+import com.shuanghe.flink.api.source.SensorReading
 import org.apache.flink.api.common.functions.{FilterFunction, IterationRuntimeContext, MapFunction, ReduceFunction, RichMapFunction, RuntimeContext}
 import org.apache.flink.configuration.Configuration
 

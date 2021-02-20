@@ -1,6 +1,6 @@
-package com.shuanghe.flink.sink
+package com.shuanghe.flink.api.sink
 
-import com.shuanghe.flink.source.SensorReading
+import com.shuanghe.flink.api.source.SensorReading
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.redis.RedisSink
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig
@@ -40,13 +40,11 @@ class MyRedisMapper extends RedisMapper[SensorReading] {
         new RedisCommandDescription(RedisCommand.HSET, "sensor_temp")
     }
 
-    //将温度指定为value
     override def getKeyFromData(data: SensorReading): String = {
-        data.temperature.toString
+        data.id
     }
 
-    //将id指定为id
     override def getValueFromData(data: SensorReading): String = {
-        data.id
+        data.temperature.toString
     }
 }

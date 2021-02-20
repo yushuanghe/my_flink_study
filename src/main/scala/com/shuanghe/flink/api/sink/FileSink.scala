@@ -1,6 +1,6 @@
-package com.shuanghe.flink.sink
+package com.shuanghe.flink.api.sink
 
-import com.shuanghe.flink.source.SensorReading
+import com.shuanghe.flink.api.source.SensorReading
 import org.apache.flink.api.common.serialization.SimpleStringEncoder
 import org.apache.flink.core.fs.Path
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink

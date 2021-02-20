@@ -1,4 +1,4 @@
-package com.shuanghe.flink.source
+package com.shuanghe.flink.api.source
 
 import org.apache.flink.streaming.api.scala._
 

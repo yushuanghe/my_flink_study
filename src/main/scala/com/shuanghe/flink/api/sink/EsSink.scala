@@ -1,7 +1,8 @@
-package com.shuanghe.flink.sink
+package com.shuanghe.flink.api.sink
 
-import com.shuanghe.flink.source.SensorReading
+import com.shuanghe.flink.api.source.SensorReading
 import org.apache.flink.streaming.api.scala._
+import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkBase
 
 object EsSink {
     def main(args: Array[String]): Unit = {
@@ -17,8 +18,7 @@ object EsSink {
                 SensorReading(arr(0), arr(1).toLong, arr(2).toDouble)
             })
 
-        //dataStream.addSink(new ElasticsearchSink[SensorReading]())
-
+//        dataStream.addSink(new )
         env.execute("es sink")
     }
 }

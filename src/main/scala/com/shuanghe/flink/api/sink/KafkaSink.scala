@@ -1,6 +1,6 @@
-package com.shuanghe.flink.sink
+package com.shuanghe.flink.api.sink
 
-import com.shuanghe.flink.source.SensorReading
+import com.shuanghe.flink.api.source.SensorReading
 import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaConsumer, FlinkKafkaProducer}

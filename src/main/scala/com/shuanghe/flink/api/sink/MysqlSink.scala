@@ -1,6 +1,6 @@
-package com.shuanghe.flink.sink
+package com.shuanghe.flink.api.sink
 
-import com.shuanghe.flink.source.{MySensorSource, SensorReading}
+import com.shuanghe.flink.api.source.{MySensorSource, SensorReading}
 import org.apache.flink.api.common.functions.{IterationRuntimeContext, RuntimeContext}
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.functions.sink.{RichSinkFunction, SinkFunction}
@@ -44,9 +44,9 @@ class MyMysqlSinkFunc extends RichSinkFunction[SensorReading] {
 
     override def open(parameters: Configuration): Unit = {
         super.open(parameters)
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "123456")
-        insertStmt = conn.prepareStatement("insert into test.sensor_temp (id,temp) values (?,?)")
-        updateStmt = conn.prepareStatement("update test.sensor_temp set temp=? where id=?")
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/docker_test", "root", "123456")
+        insertStmt = conn.prepareStatement("insert into docker_test.sensor_temp (id,temp) values (?,?)")
+        updateStmt = conn.prepareStatement("update docker_test.sensor_temp set temp=? where id=?")
     }
 
     override def close(): Unit = {
