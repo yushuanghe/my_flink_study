@@ -32,7 +32,9 @@ object RedisSinkTest {
     }
 }
 
-//redis实际操作
+/**
+ * redis实际操作
+ */
 class MyRedisMapper extends RedisMapper[SensorReading] {
     //定义保存数据写入redis的命令
     //hset 表名 key value

@@ -72,7 +72,11 @@ class MyReduceFunction extends ReduceFunction[SensorReading] {
     }
 }
 
-//自定义函数类
+/**
+ * 自定义函数类
+ *
+ * @param keyword
+ */
 class MyFilter(keyword: String) extends FilterFunction[SensorReading] {
     override def filter(value: SensorReading): Boolean = {
         value.id.startsWith(keyword)
@@ -85,7 +89,9 @@ class MyMapper extends MapFunction[SensorReading, String] {
     }
 }
 
-//富函数，可以获取到运行时上下文，还有一些生命周期方法
+/**
+ * 富函数，可以获取到运行时上下文，还有一些生命周期方法
+ */
 class MyRichMapper extends RichMapFunction[SensorReading, String] {
     override def map(value: SensorReading): String = {
         value.id + " temperature"

@@ -99,7 +99,9 @@ class MyReducer extends ReduceFunction[SensorReading] {
     }
 }
 
-//周期性watermark
+/**
+ * 周期性watermark
+ */
 class MyPeriodicWatermark extends AssignerWithPeriodicWatermarks[SensorReading] {
     //延迟 60s
     val bound: Long = 60 * 1000L
@@ -128,7 +130,9 @@ class MyPeriodicWatermark extends AssignerWithPeriodicWatermarks[SensorReading] 
     }
 }
 
-//间断式watermark
+/**
+ * 间断式watermark
+ */
 class MyPunctuatedWatermark extends AssignerWithPunctuatedWatermarks[SensorReading] {
     //延迟 60s
     val bound: Long = 60 * 1000L

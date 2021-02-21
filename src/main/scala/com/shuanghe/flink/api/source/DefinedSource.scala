@@ -19,7 +19,9 @@ object DefinedSource {
     }
 }
 
-//自定义SourceFunction
+/**
+ * 自定义SourceFunction
+ */
 class MySensorSource() extends SourceFunction[SensorReading] {
     //定义随机数发生器
     val rand: Random.type = Random
