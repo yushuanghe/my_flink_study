@@ -2,6 +2,8 @@ package com.shuanghe.flink.api.process
 
 import com.shuanghe.flink.api.source.SensorReading
 import org.apache.flink.api.common.serialization.SimpleStringSchema
+import org.apache.flink.runtime.state.filesystem.FsStateBackend
+import org.apache.flink.runtime.state.memory.MemoryStateBackend
 import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
@@ -13,6 +15,10 @@ object ProcessSideOutputTest {
     def main(args: Array[String]): Unit = {
         val env = StreamExecutionEnvironment.getExecutionEnvironment
         env.setParallelism(1)
+
+        env.setStateBackend(new MemoryStateBackend())
+        env.setStateBackend(new FsStateBackend("hdfs://"))
+        env.setStateBackend(new RocksDBStateBackend(""))
 
         val prop = new Properties()
         prop.setProperty("bootstrap.servers", "localhost:9092")
