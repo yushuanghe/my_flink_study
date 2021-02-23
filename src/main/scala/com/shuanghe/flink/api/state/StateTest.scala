@@ -33,13 +33,25 @@ object StateTest {
             })
 
         //温度跳变，超过10度，报警
+        val threshold = 10.0
         val alertStream: DataStream[(String, Double, Double)] = dataStream
             .keyBy(data => data.id)
             //.flatMap(new TempChangeAlert(10.0))
             //有状态的flatmap
-            .flatMapWithState((SensorReading, Option[ValueState[Double]])=>{
-
-        })
+            //必须先定义泛型
+            .flatMapWithState[(String, Double, Double), Double]({
+                case (data: SensorReading, None) => (List.empty, Some(data.temperature)) //初识第一条，不输出
+                case (data: SensorReading, lastTemp: Some[Double]) => {
+                    val newTemp = data.temperature
+                    val diff = (newTemp - lastTemp.get).abs
+                    if (diff > threshold) {
+                        (List((data.id, lastTemp.get, newTemp)), Some(newTemp))
+                    } else {
+                        //不输出
+                        (List.empty, Some(newTemp))
+                    }
+                }
+            })
 
         alertStream.print()
 
@@ -54,8 +66,7 @@ object StateTest {
  */
 class TempChangeAlert(threshold: Double) extends RichFlatMapFunction[SensorReading, (String, Double, Double)] {
     lazy val lastTempState: ValueState[Double] = getRuntimeContext.getState(new ValueStateDescriptor[Double]
-    ("last_temp",
-        classOf[Double]))
+    ("last_temp", classOf[Double]))
 
     override def open(parameters: Configuration): Unit = {
         super.open(parameters)
