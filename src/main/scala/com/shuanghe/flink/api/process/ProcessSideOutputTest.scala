@@ -8,8 +8,9 @@ import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.util.Collector
-
 import java.util.Properties
+
+import org.apache.flink.contrib.streaming.state.RocksDBStateBackend
 
 object ProcessSideOutputTest {
     def main(args: Array[String]): Unit = {
