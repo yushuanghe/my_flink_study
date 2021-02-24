@@ -3,20 +3,47 @@ package com.shuanghe.flink.api.state
 import com.shuanghe.flink.api.source.SensorReading
 import com.shuanghe.flink.api.transform.MyReduceFunction
 import org.apache.flink.api.common.functions.{RichFlatMapFunction, RichMapFunction}
+import org.apache.flink.api.common.restartstrategy.RestartStrategies
 import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.api.common.state.{ListState, ListStateDescriptor, MapState, MapStateDescriptor, ReducingState, ReducingStateDescriptor, ValueState, ValueStateDescriptor}
+import org.apache.flink.api.common.time.Time
 import org.apache.flink.configuration.Configuration
+import org.apache.flink.contrib.streaming.state.RocksDBStateBackend
+import org.apache.flink.runtime.state.filesystem.FsStateBackend
+import org.apache.flink.runtime.state.memory.MemoryStateBackend
+import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.util.Collector
 
 import java.{lang, util}
 import java.util.Properties
+import java.util.concurrent.TimeUnit
 
 object StateTest {
     def main(args: Array[String]): Unit = {
         val env = StreamExecutionEnvironment.getExecutionEnvironment
         env.setParallelism(1)
+
+        env.setStateBackend(new MemoryStateBackend())
+        env.setStateBackend(new FsStateBackend("hdfs://", true))
+        env.setStateBackend(new RocksDBStateBackend(""))
+
+        //checkpoint
+        //时间间隔是JobManager给source任务触发checkpoint的时间间隔
+        env.enableCheckpointing(1000L, CheckpointingMode.EXACTLY_ONCE)
+        env.getCheckpointConfig.setCheckpointTimeout(60000L)
+        env.getCheckpointConfig.setMaxConcurrentCheckpoints(2)
+        //会覆盖 setMaxConcurrentCheckpoints
+        env.getCheckpointConfig.setMinPauseBetweenCheckpoints(500L)
+        env.getCheckpointConfig.setPreferCheckpointForRecovery(true)
+        env.getCheckpointConfig.setTolerableCheckpointFailureNumber(3)
+
+        //重启策略
+        //固定时间间隔重启
+        env.setRestartStrategy(RestartStrategies.fixedDelayRestart(3, Time.seconds(5)))
+        env.setRestartStrategy(RestartStrategies.failureRateRestart(5, Time.of(5, TimeUnit.MINUTES), Time.of(10,
+            TimeUnit.SECONDS)))
 
         val prop = new Properties()
         prop.setProperty("bootstrap.servers", "localhost:9092")
