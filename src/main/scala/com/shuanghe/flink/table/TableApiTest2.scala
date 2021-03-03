@@ -81,6 +81,9 @@ object TableApiTest2 {
         resultTable.toAppendStream[(String, Double)].print("table_api")
         resultSqlTable.toAppendStream[(String, Double)].print("sql")
 
+        val explain = oldStreamTableEnv.explain(resultSqlTable)
+        println(explain)
+
         env.execute("table api test")
     }
 }

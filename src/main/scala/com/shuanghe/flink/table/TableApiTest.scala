@@ -5,6 +5,8 @@ import org.apache.flink.streaming.api.scala._
 import org.apache.flink.table.api.Table
 import org.apache.flink.table.api.scala._
 
+import java.sql.Timestamp
+
 object TableApiTest {
     def main(args: Array[String]): Unit = {
         val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
@@ -21,16 +23,16 @@ object TableApiTest {
         val tableEnv: StreamTableEnvironment = StreamTableEnvironment.create(env)
 
         //基于流创建一张表
-        val dataTable: Table = tableEnv.fromDataStream(dataStream)
+        val dataTable: Table = tableEnv.fromDataStream(dataStream, 'id, 'timestamp, 'temperature, 'pt.proctime)
 
         //调用table api进行转换
         val resultTable: Table = dataTable
-            .select("id,temperature")
+            .select("id,temperature,pt")
             .filter("id='s1'")
 
         resultTable.printSchema()
 
-        resultTable.toAppendStream[(String, Double)]
+        resultTable.toAppendStream[(String, Double, Timestamp)]
             .print("result")
 
         //直接用sql实现
