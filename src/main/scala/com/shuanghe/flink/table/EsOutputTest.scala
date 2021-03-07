@@ -43,14 +43,17 @@ object EsOutputTest {
             .withFormat(new Json)
             .withSchema(new Schema()
                 .field("id", DataTypes.STRING())
-                .field("cnt", DataTypes.BIGINT()))
+                .field("cnt", DataTypes.BIGINT())
+            )
             .createTemporaryTable("es_output_table")
 
         aggTable.insertInto("es_output_table")
 
-        val sinkDD="""
-                |
-                |""".stripMargin
+        val sinkDDL =
+            """
+              |
+              |""".stripMargin
+        oldStreamTableEnv.sqlUpdate(sinkDDL)
 
         env.execute("es output test")
     }

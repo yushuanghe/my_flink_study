@@ -4,6 +4,9 @@ import org.apache.flink.streaming.api.scala._
 import org.apache.flink.table.api.{DataTypes, EnvironmentSettings, Table}
 import org.apache.flink.table.api.scala._
 import org.apache.flink.table.descriptors.{Csv, FileSystem, Schema}
+import org.apache.flink.types.Row
+
+import java.sql.Timestamp
 
 object FileOutputTest {
     def main(args: Array[String]): Unit = {
@@ -19,6 +22,7 @@ object FileOutputTest {
             .field("id", DataTypes.STRING())
             .field("timestamp", DataTypes.BIGINT())
             .field("temperature", DataTypes.DOUBLE())
+
         oldStreamTableEnv.connect(new FileSystem().path(inputPath))
             .withFormat(new Csv().fieldDelimiter('\t'))
             .withSchema(tableSchema)
@@ -34,7 +38,7 @@ object FileOutputTest {
 
         //输出到文件
         oldStreamTableEnv.connect(new FileSystem().path
-        ("C:\\Users\\yushu\\studyspace\\my_flink_study\\src\\main\\output\\sensor_output.txt"))
+        ("C:\\Users\\yushu\\studyspace\\my_flink_study\\src\\main\\output\\sensor_output"))
             .withFormat(new Csv().fieldDelimiter('\073'))
             .withSchema(new Schema()
                 .field("id", DataTypes.STRING())
