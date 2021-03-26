@@ -69,5 +69,5 @@ class MyMysqlSinkFunc extends RichSinkFunction[SensorReading] {
         }
     }
 
-    override def invoke(value: SensorReading, context: SinkFunction.Context[_]): Unit = super.invoke(value, context)
+    override def invoke(value: SensorReading, context: SinkFunction.Context): Unit = super.invoke(value, context)
 }

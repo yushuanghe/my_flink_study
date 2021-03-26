@@ -13,7 +13,7 @@ object TransformTest {
         val inputPath = "C:\\Users\\yushu\\studyspace\\my_flink_study\\src\\main\\resources\\sensor.txt"
         val inputStream: DataStream[String] = env.readTextFile(inputPath)
 
-        val dataStream = inputStream
+        val dataStream: DataStream[SensorReading] = inputStream
             .map(data => {
                 val arr = data.split("\t")
                 SensorReading(arr(0), arr(1).toLong, arr(2).toDouble)
@@ -36,31 +36,31 @@ object TransformTest {
 
         //resultStream.print()
 
-        //多流转换操作
-        //分流 split
-        val splitStream: SplitStream[SensorReading] = dataStream
-            .split(data => {
-                if (data.temperature > 30.0) Seq("high") else Seq("low")
-            })
-        val highStream: DataStream[SensorReading] = splitStream.select("high")
-        val lowStream = splitStream.select("low")
-        val allStream = splitStream.select("high", "low")
-
-        //highStream.print("high")
-        //lowStream.print("low")
-        //allStream.print("all")
-
-        //合流操作 connect
-        val warningStream: DataStream[(String, Double)] = highStream.map(data => (data.id, data.temperature))
-        val connectedStream: ConnectedStreams[(String, Double), SensorReading] = warningStream.connect(lowStream)
-
-        val coMapResultStream: DataStream[Product] = connectedStream
-            .map(warningData => (warningData._1, warningData._2, "warning"), lowData => (lowData.id, "healthy"))
-
-        coMapResultStream.print("coMap")
-
-        //union合流
-        val unionStream = highStream.union(lowStream)
+        ////多流转换操作
+        ////分流 split
+        //val splitStream: SplitStream[SensorReading] = dataStream
+        //    .split(data => {
+        //        if (data.temperature > 30.0) Seq("high") else Seq("low")
+        //    })
+        //val highStream: DataStream[SensorReading] = splitStream.select("high")
+        //val lowStream = splitStream.select("low")
+        //val allStream = splitStream.select("high", "low")
+        //
+        ////highStream.print("high")
+        ////lowStream.print("low")
+        ////allStream.print("all")
+        //
+        ////合流操作 connect
+        //val warningStream: DataStream[(String, Double)] = highStream.map(data => (data.id, data.temperature))
+        //val connectedStream: ConnectedStreams[(String, Double), SensorReading] = warningStream.connect(lowStream)
+        //
+        //val coMapResultStream: DataStream[Product] = connectedStream
+        //    .map(warningData => (warningData._1, warningData._2, "warning"), lowData => (lowData.id, "healthy"))
+        //
+        //coMapResultStream.print("coMap")
+        //
+        ////union合流
+        //val unionStream = highStream.union(lowStream)
 
         env.execute("transform test")
     }

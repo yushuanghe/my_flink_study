@@ -2,8 +2,8 @@ package com.shuanghe.flink.table
 
 import com.shuanghe.flink.api.source.SensorReading
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.table.api.Table
-import org.apache.flink.table.api.scala._
+import org.apache.flink.table.api._
+import org.apache.flink.table.api.bridge.scala.{StreamTableEnvironment, tableConversions}
 
 import java.sql.Timestamp
 

@@ -2,8 +2,8 @@ package com.shuanghe.flink.table
 
 import org.apache.flink.api.scala.ExecutionEnvironment
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.table.api.{DataTypes, EnvironmentSettings, Table, TableEnvironment}
-import org.apache.flink.table.api.scala._
+import org.apache.flink.table.api.bridge.scala.{BatchTableEnvironment, StreamTableEnvironment, tableConversions}
+import org.apache.flink.table.api._
 import org.apache.flink.table.descriptors.{Csv, FileSystem, Kafka, Schema}
 
 object TableApiTest2 {
@@ -30,12 +30,12 @@ object TableApiTest2 {
             .build()
         val blinkStreamTableEnv: StreamTableEnvironment = StreamTableEnvironment.create(env, blinkStreamSettings)
 
-        //1.4、基于blink planner的批处理
-        val blinkBatchSettings: EnvironmentSettings = EnvironmentSettings.newInstance()
-            .useBlinkPlanner()
-            .inBatchMode()
-            .build()
-        val blinkBatchTableEnv: TableEnvironment = TableEnvironment.create(blinkBatchSettings)
+        ////1.4、基于blink planner的批处理
+        //val blinkBatchSettings: EnvironmentSettings = EnvironmentSettings.newInstance()
+        //    .useBlinkPlanner()
+        //    .inBatchMode()
+        //    .build()
+        //val blinkBatchTableEnv: TableEnvironment = TableEnvironment.create(blinkBatchSettings)
 
         //2、连接外部系统，读取数据，注册表
         val tableSchema: Schema = new Schema()

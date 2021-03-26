@@ -1,8 +1,8 @@
 package com.shuanghe.flink.table
 
-import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
-import org.apache.flink.table.api.{DataTypes, EnvironmentSettings}
-import org.apache.flink.table.api.scala._
+import org.apache.flink.streaming.api.scala._
+import org.apache.flink.table.api.bridge.scala.{StreamTableEnvironment, tableConversions}
+import org.apache.flink.table.api._
 import org.apache.flink.table.descriptors.{Csv, FileSystem, Schema}
 
 object MysqlOutputTest {
@@ -33,6 +33,8 @@ object MysqlOutputTest {
         val aggTable = resultTable
             .groupBy('id)
             .select('id, 'id.count as 'cnt)
+        aggTable.printSchema()
+        aggTable.toRetractStream[(String, Long)].print()
 
         val sinkDDL: String =
             """
@@ -41,7 +43,7 @@ object MysqlOutputTest {
               |cnt bigint not null
               |) with (
               |'connector.type'='jdbc',
-              |'connector.url'='jdbc:mysql://localhost:3306/test',
+              |'connector.url'='jdbc:mysql://localhost:3306/docker_test',
               |'connector.table'='sensor_count',
               |'connector.driver'='com.mysql.jdbc.Driver',
               |'connector.username'='root',

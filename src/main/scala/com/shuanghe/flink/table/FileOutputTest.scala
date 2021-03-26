@@ -1,8 +1,8 @@
 package com.shuanghe.flink.table
 
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.table.api.{DataTypes, EnvironmentSettings, Table}
-import org.apache.flink.table.api.scala._
+import org.apache.flink.table.api.bridge.scala.{StreamTableEnvironment, tableConversions}
+import org.apache.flink.table.api._
 import org.apache.flink.table.descriptors.{Csv, FileSystem, Schema}
 import org.apache.flink.types.Row
 
